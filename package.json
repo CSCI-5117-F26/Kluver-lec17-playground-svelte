@@ -34,5 +34,9 @@
 	"imports": {
 		"#lib": "./src/lib/index.js",
 		"#lib/*": "./src/lib/*"
+	},
+	"dependencies": {
+		"@vercel/functions": "^3.11.0",
+		"mongodb": "7.8"
 	}
 }

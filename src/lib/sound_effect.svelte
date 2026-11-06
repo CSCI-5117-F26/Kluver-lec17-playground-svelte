@@ -1,25 +1,30 @@
-<script module>
-    
-</script>
-
 <script lang="ts">
-	import { browser } from '$app/env';
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let ZZFX:any = undefined
-    if (browser) {
-        ZZFX = (await import('zzfx')).ZZFX;
-    }
+    // Import libraries
+    import zzfx from '#lib/zzfx_lib.ts'
+
+
+    // Object setup
+    let {sound_data=[2,,46,.01,.05,.21,4,3.3,4,,,,,2,,.3,.33,.44,.08,,357]} = $props()
+    let sound_model = $derived(new zzfx.ZZFXSound(sound_data))
+
+
+
+
+
+
 	// instance-level logic goes here
     function play_sound_effect() {
-        if(browser) {
-            ZZFX.play(...[.7,,258,.01,.02,.07,,1.5,15,52,,,,,,,,.64,,,117])
-        }
+        sound_model.play()
     }
 </script>
 
 <!-- markup (zero or more items) goes here -->
  <button onclick={play_sound_effect}>jump</button>
-
+ <!-- this computation doesn't account for randomness. 
+  when implemented with the zzfxSound -- randomness seems to change playspeed.
+  we could ditch that and I _think_ frequency changes don't effect randomness if we don't prebuild samples.
+  In this case time = attack+Decay+sustain+release+Delay(default 0) (indexes 6, 7, 8, 9, 19) -->
+{sound_model?.samples?.length / zzfx.ZZFX.sampleRate}
 <style>
 	/* styles go here */
 </style>
