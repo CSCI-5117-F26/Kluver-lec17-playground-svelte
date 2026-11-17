@@ -6,9 +6,11 @@
     // Object setup
     let {
         sound_data=[2,,46,.01,.05,.21,4,3.3,4,,,,,2,,.3,.33,.44,.08,,357],
-        emoji = "🔊" // we might want/need a cleaner solution to this long-run.
+        emoji = "🔊",
+        id = null
     } = $props()
-    let sound_model = $derived(new Sound(sound_data))
+    let sound_model = new Sound(sound_data)
+    // $inspect(sound_model.playing).with(console.log);
 
 
 
@@ -61,7 +63,7 @@
                 <path xmlns="http://www.w3.org/2000/svg" style="fill:1;" d="M194.172,123.684l-78.081-51.122c-1.921-1.257-4.032-1.922-6.106-1.922   c-5.521,0-9.686,4.496-9.686,10.458v103.207c0,5.962,4.164,10.458,9.685,10.458c2.075,0,4.187-0.665,6.106-1.923l78.082-51.129   c3.251-2.129,5.117-5.415,5.116-9.014C199.289,129.098,197.424,125.814,194.172,123.684z M115.3,175.429V89.973l65.256,42.725   L115.3,175.429z"/>
             </g>
         </svg>
-        <div class="gear" onclick={(e)=>{e.stopPropagation()}}>⚙️</div>
+        <a href="/edit/{id}" class="gear" onclick={(e)=>{e.stopPropagation()}}>⚙️</a>
     </div>
 </div>
 
@@ -77,6 +79,8 @@
         border: 1px solid black;
         position: relative;
         cursor: pointer;
+        width: 1em;
+        height: 1em;
     }
     .hover {
         display: none;
@@ -117,6 +121,7 @@
             background-color:hsl(60 10% 50% / 55%);
             border-radius: 100%;
             padding:0.05em;
+            text-decoration: none;
         }
     }
 

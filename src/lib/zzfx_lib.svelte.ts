@@ -14,15 +14,19 @@ if (browser) {
   zzfx = (await import('zzfx'));
 
 
-  let frameId: number;
+  // let frameId: number;
 
-  function update() {
+  setInterval(() => {
     audio_status.time = zzfx.ZZFX.audioContext.currentTime;
-    frameId = requestAnimationFrame(update);
-  }
+  }, 5);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  frameId = requestAnimationFrame(update);
+  // function update() {
+  //   audio_status.time = zzfx.ZZFX.audioContext.currentTime;
+  //   frameId = requestAnimationFrame(update);
+  // }
+
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // frameId = requestAnimationFrame(update);
 
 
 } else {
@@ -51,7 +55,7 @@ export class Sound {
   sound_data: sound_data_type;
 
   duration = $state(undefined as number|undefined)
-  started = $state(0)
+  started = $state(audio_status.time)
   end_at = $derived.by(()=>{
     if (this.duration === undefined) {
       return undefined
@@ -64,7 +68,7 @@ export class Sound {
     } else return audio_status.time < this.end_at;
   })
   progress_percent = $derived.by(()=>{
-    if (! this.playing) {
+    if (! this.playing || this.duration === undefined) {
       return undefined
     } else {
       return (audio_status.time - this.started)/this.duration*100;
@@ -73,13 +77,14 @@ export class Sound {
 
   constructor(sound_data:sound_data_type) {
     this.sound_data = sound_data
-    this.duration = sound_data[6]+sound_data[7]+sound_data[8]+sound_data[9]+(sound_data[19]|0)
+    this.duration = undefined
   }
 
   play() {
     const audio_node:AudioBufferSourceNode = zzfx.ZZFX.play(...this.sound_data)
-    this.duration = audio_node.buffer?.duration
-    this.started = audio_status.time/audio_node.playbackRate.value
+    this.started = audio_status.time
+    this.duration = (audio_node.buffer?.duration)/audio_node.playbackRate.value
+    setTimeout(()=>{this.duration=undefined},1100*this.duration)
   }
 
 }
