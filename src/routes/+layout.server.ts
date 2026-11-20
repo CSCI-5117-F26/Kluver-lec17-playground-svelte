@@ -4,6 +4,7 @@ import type { RequestHandler } from './$types';
 import { MONGO_MONGODB_URI } from '$app/env/private';
 import { BSON, MongoClient } from 'mongodb';
 import { attachDatabasePool } from '@vercel/functions';
+import { getRequestEvent } from '$app/server';
 const EJSON = BSON.EJSON;
 //https://www.mongodb.com/docs/drivers/node/current/data-formats/extended-json/
 
@@ -15,11 +16,17 @@ export const load: LayoutServerLoad = async ({ params }) => {
 	// planned design: a board has fixed sounds, so store them "flat"
 	// each user has one board, so store id by userid (rather than generic)
 
-	const user = 'KLUVER'; // temp until we get auth...
+	const event = getRequestEvent()
+	const user = event.locals.user; // temp until we get auth...
+	console.log("user", user)
 
 	const board = database.collection('boards');
-
-	// TODO: make username unique and add an index.
-	const the_board = await board.findOne({ name: user });
+	let the_board = null;
+	if(user) {
+		the_board = await board.findOne({ name: user.email });
+	}
+	if(! the_board) {
+		the_board = {sounds:[]}
+	}
 	return EJSON.serialize(the_board)
 };

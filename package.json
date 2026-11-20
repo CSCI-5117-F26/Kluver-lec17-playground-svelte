@@ -36,8 +36,10 @@
 		"#lib/*": "./src/lib/*"
 	},
 	"dependencies": {
+		"@better-auth/mongo-adapter": "^1.7.25",
 		"@gyen/frimousse": "^0.1.1",
-		"@vercel/functions": "^3.11.0",
+		"@vercel/functions": "^3.11.3",
+		"better-auth": "^1.7.25",
 		"mongodb": "7.8",
 		"zzfx": "^1.4.0"
 	}
